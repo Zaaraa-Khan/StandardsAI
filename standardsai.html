@@ -1,0 +1,3609 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>StandardsAI — Indian Standards Recommendation Platform</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --navy: #0B2545;
+            --navy-2: #123A68;
+            --blue: #1B4B91;
+            --blue-light: #EAF0FB;
+            --teal: #0F7C6C;
+            --teal-light: #E5F4F1;
+            --amber: #A9660E;
+            --amber-light: #FBF0DF;
+            --red: #B42318;
+            --red-light: #FDECEC;
+            --off: #F4F6F8;
+            --ink: #101828;
+            --grey: #5B6472;
+            --muted: #98A2B3;
+            --line: #E1E5EB;
+            --white: #FFFFFF;
+            --shadow: 0 8px 24px rgba(16, 24, 40, 0.07);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            min-height: 100%;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, Arial, sans-serif;
+            background: var(--off);
+            color: var(--ink);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            letter-spacing: -0.015em;
+        }
+
+        button,
+        input,
+        textarea,
+        select {
+            font-family: inherit;
+        }
+
+        button {
+            border: none;
+            border-radius: 12px;
+            padding: 13px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            background: var(--blue);
+            color: white;
+            transition:
+                transform 0.12s ease,
+                box-shadow 0.18s ease,
+                background 0.18s ease;
+        }
+
+        button:hover {
+            box-shadow: 0 5px 16px rgba(27, 75, 145, 0.20);
+        }
+
+        button:active {
+            transform: scale(0.97);
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            border: 1px solid #D5DAE2;
+            background: white;
+            border-radius: 12px;
+            padding: 12px 14px;
+            font-size: 14px;
+            color: var(--ink);
+            outline: none;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(27, 75, 145, 0.10);
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        #app {
+            min-height: 100vh;
+            background: var(--off);
+        }
+
+        /* =========================================
+           ANIMATIONS
+        ========================================= */
+
+        .fadein {
+            animation: fadein 0.32s ease;
+        }
+
+        @keyframes fadein {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes welcomeAppear {
+            from {
+                opacity: 0;
+                transform: translateY(18px) scale(0.97);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes welcomeProgress {
+            from {
+                width: 0%;
+            }
+
+            to {
+                width: 100%;
+            }
+        }
+
+        /* =========================================
+           WELCOME / SPLASH SCREEN
+        ========================================= */
+
+        .welcome-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            color: white;
+
+            background:
+                radial-gradient(circle at 15% 15%,
+                    rgba(56, 117, 205, 0.20),
+                    transparent 32%),
+                radial-gradient(circle at 85% 80%,
+                    rgba(15, 124, 108, 0.18),
+                    transparent 30%),
+                linear-gradient(145deg,
+                    #071B34,
+                    #0B2545 55%,
+                    #123D73);
+        }
+
+        .welcome-content {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            animation: welcomeAppear 0.8s ease;
+        }
+
+        .welcome-logo {
+            width: 82px;
+            height: 82px;
+            margin: 0 auto 22px;
+            border-radius: 23px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: white;
+            color: var(--navy);
+
+            font-family: 'Poppins', sans-serif;
+            font-size: 25px;
+            font-weight: 700;
+
+            box-shadow:
+                0 20px 50px rgba(0, 0, 0, 0.25);
+        }
+
+        .welcome-content h1 {
+            font-size: 35px;
+            letter-spacing: -0.035em;
+        }
+
+        .welcome-content p {
+            margin: 10px 0 0;
+            color: rgba(255, 255, 255, 0.74);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .welcome-loader {
+            width: 155px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.16);
+            border-radius: 20px;
+            margin: 34px auto 0;
+            overflow: hidden;
+        }
+
+        .welcome-loader-bar {
+            width: 0%;
+            height: 100%;
+            border-radius: 20px;
+            background: white;
+            animation: welcomeProgress 5s linear forwards;
+        }
+
+        .welcome-footer {
+            position: absolute;
+            bottom: 28px;
+            font-size: 10px;
+            letter-spacing: 0.04em;
+            color: rgba(255, 255, 255, 0.40);
+        }
+
+        .welcome-glow {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .glow-one {
+            width: 300px;
+            height: 300px;
+            right: -120px;
+            top: -130px;
+            background: rgba(60, 120, 220, 0.12);
+        }
+
+        .glow-two {
+            width: 250px;
+            height: 250px;
+            left: -120px;
+            bottom: -120px;
+            background: rgba(15, 124, 108, 0.12);
+        }
+
+        /* =========================================
+           LOGIN
+        ========================================= */
+
+        .login-page {
+            min-height: 100vh;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            background:
+                radial-gradient(circle at 90% 5%,
+                    rgba(27, 75, 145, 0.09),
+                    transparent 28%),
+                var(--off);
+        }
+
+        .login-brand {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .login-logo {
+            width: 55px;
+            height: 55px;
+            margin: 0 auto 12px;
+            border-radius: 16px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: linear-gradient(135deg,
+                    var(--navy),
+                    var(--blue));
+
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+
+            box-shadow:
+                0 10px 28px rgba(11, 37, 69, 0.18);
+        }
+
+        .login-brand h1 {
+            font-size: 25px;
+        }
+
+        .login-brand p {
+            color: var(--grey);
+            font-size: 12.5px;
+            margin-top: 5px;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 440px;
+            margin: 0 auto;
+
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            padding: 25px;
+
+            box-shadow:
+                0 15px 40px rgba(16, 24, 40, 0.08);
+        }
+
+        .login-heading h2 {
+            font-size: 21px;
+        }
+
+        .login-heading p {
+            color: var(--grey);
+            font-size: 12.5px;
+            line-height: 1.5;
+            margin: 5px 0 22px;
+        }
+
+        .login-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 11px;
+        }
+
+        .remember {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin: 0;
+            font-size: 11px;
+            color: var(--grey);
+            font-weight: 400;
+        }
+
+        .remember input {
+            width: auto;
+            margin: 0;
+        }
+
+        .forgot-btn {
+            padding: 0;
+            background: none;
+            color: var(--blue);
+            font-size: 11px;
+            box-shadow: none !important;
+        }
+
+        .forgot-btn:hover {
+            text-decoration: underline;
+            background: none;
+        }
+
+        .login-btn {
+            width: 100%;
+            margin-top: 20px;
+            padding: 14px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+
+            background:
+                linear-gradient(135deg,
+                    var(--navy),
+                    var(--blue));
+        }
+
+        .login-btn span {
+            font-size: 17px;
+        }
+
+        .login-divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 20px 0;
+            color: var(--muted);
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .login-divider::before,
+        .login-divider::after {
+            content: "";
+            height: 1px;
+            background: var(--line);
+            flex: 1;
+        }
+
+        .guest-btn {
+            width: 100%;
+            background: white;
+            color: var(--blue);
+            border: 1.5px solid #C8D2E1;
+            padding: 13px;
+            box-shadow: none;
+        }
+
+        .guest-btn:hover {
+            background: #F5F8FD;
+            border-color: var(--blue);
+            box-shadow: none;
+        }
+
+        .login-note {
+            text-align: center;
+            color: var(--muted);
+            font-size: 10px;
+            margin-top: 18px;
+        }
+
+        /* =========================================
+           APP SHELL
+        ========================================= */
+
+        .app-shell {
+            min-height: 100vh;
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 235px;
+            min-height: 100vh;
+            background: var(--navy);
+            color: white;
+            padding: 22px 14px;
+
+            display: flex;
+            flex-direction: column;
+
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 3px 10px 25px;
+        }
+
+        .brand-logo {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: white;
+            color: var(--navy);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .brand-text strong {
+            display: block;
+            font-family: 'Poppins', sans-serif;
+            font-size: 15px;
+        }
+
+        .brand-text span {
+            font-size: 9px;
+            color: rgba(255, 255, 255, 0.55);
+        }
+
+        .side-label {
+            color: rgba(255, 255, 255, 0.38);
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 0 10px 8px;
+        }
+
+        .side-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .side-btn {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            padding: 11px 12px;
+            border-radius: 10px;
+
+            background: transparent;
+            color: rgba(255, 255, 255, 0.65);
+
+            text-align: left;
+            font-size: 12px;
+            font-weight: 500;
+
+            box-shadow: none;
+        }
+
+        .side-btn:hover {
+            background: rgba(255, 255, 255, 0.07);
+            box-shadow: none;
+            color: white;
+        }
+
+        .side-btn.active {
+            background: rgba(255, 255, 255, 0.12);
+            color: white;
+        }
+
+        .side-icon {
+            width: 21px;
+            text-align: center;
+            font-size: 15px;
+        }
+
+        .side-bottom {
+            margin-top: auto;
+        }
+
+        .main-area {
+            margin-left: 235px;
+            width: calc(100% - 235px);
+            min-height: 100vh;
+            background: var(--off);
+        }
+
+        .desktop-topbar {
+            height: 70px;
+            padding: 0 28px;
+            background: white;
+            border-bottom: 1px solid var(--line);
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .page-title h2 {
+            font-size: 18px;
+        }
+
+        .page-title p {
+            font-size: 11px;
+            color: var(--grey);
+            margin: 3px 0 0;
+        }
+
+        .user-pill {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-size: 11px;
+            color: var(--grey);
+        }
+
+        .avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: var(--blue-light);
+            color: var(--blue);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-weight: 700;
+        }
+
+        .content {
+            padding: 25px 28px 40px;
+            max-width: 1120px;
+        }
+
+        /* =========================================
+           DASHBOARD
+        ========================================= */
+
+        .hero {
+            position: relative;
+            overflow: hidden;
+
+            background:
+                linear-gradient(135deg,
+                    var(--navy),
+                    var(--blue));
+
+            color: white;
+            border-radius: 20px;
+            padding: 25px;
+        }
+
+        .hero::after {
+            content: "";
+            position: absolute;
+            right: -45px;
+            top: -45px;
+            width: 170px;
+            height: 170px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            left: -35px;
+            bottom: -55px;
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero small {
+            color: rgba(255, 255, 255, 0.72);
+            font-size: 11px;
+        }
+
+        .hero h1 {
+            font-size: 25px;
+            margin-top: 4px;
+        }
+
+        .hero p {
+            color: rgba(255, 255, 255, 0.76);
+            font-size: 12.5px;
+            max-width: 500px;
+            line-height: 1.5;
+        }
+
+        .hero-btn {
+            margin-top: 10px;
+            background: white;
+            color: var(--blue);
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 15px;
+            padding: 15px;
+
+            display: flex;
+            align-items: center;
+            gap: 11px;
+
+            transition: transform .12s, box-shadow .12s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .stat-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .stat-label {
+            font-size: 10px;
+            color: var(--grey);
+            margin-top: 1px;
+        }
+
+        .section-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 25px 0 10px;
+        }
+
+        .section-head h3 {
+            font-size: 14px;
+        }
+
+        .section-head span {
+            font-size: 11px;
+            color: var(--blue);
+            cursor: pointer;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 16px;
+        }
+
+        .panel {
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 18px;
+        }
+
+        .activity-chart {
+            height: 170px;
+            display: flex;
+            align-items: end;
+            gap: 12px;
+            padding: 15px 5px 5px;
+        }
+
+        .chart-bar {
+            flex: 1;
+            border-radius: 6px 6px 2px 2px;
+            background: linear-gradient(to top,
+                    var(--blue),
+                    #5E82B9);
+            min-height: 15px;
+        }
+
+        .chart-labels {
+            display: flex;
+            gap: 12px;
+            padding: 0 5px;
+        }
+
+        .chart-labels span {
+            flex: 1;
+            text-align: center;
+            font-size: 9px;
+            color: var(--muted);
+        }
+
+        /* =========================================
+           RECENT LIST
+        ========================================= */
+
+        .rec-list {
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background: white;
+            overflow: hidden;
+        }
+
+        .rec-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            border-bottom: 1px solid #ECEEF2;
+
+            transition: transform .12s, box-shadow .12s;
+        }
+
+        .rec-row:last-child {
+            border-bottom: none;
+        }
+
+        .rec-row:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(16, 24, 40, 0.07);
+        }
+
+        .rec-bar {
+            width: 4px;
+            height: 34px;
+            border-radius: 5px;
+            flex-shrink: 0;
+        }
+
+        .rec-main {
+            flex: 1;
+        }
+
+        .rec-title {
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .rec-sub {
+            font-size: 10.5px;
+            color: var(--grey);
+            margin-top: 3px;
+        }
+
+        .status-dot {
+            font-size: 10px;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .status-current {
+            background: var(--teal-light);
+            color: var(--teal);
+        }
+
+        .status-warning {
+            background: var(--amber-light);
+            color: var(--amber);
+        }
+
+        /* =========================================
+           NEW RECOMMENDATION
+        ========================================= */
+
+        .form-container {
+            max-width: 760px;
+        }
+
+        .step-dots {
+            display: flex;
+            gap: 7px;
+            margin: 14px 0 25px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #D9DEE7;
+        }
+
+        .dot.on {
+            background: var(--blue);
+        }
+
+        .upload-zone {
+            border: 1.5px dashed #C6CDD8;
+            border-radius: 14px;
+            padding: 25px 15px;
+            text-align: center;
+            background: #FAFBFC;
+            color: var(--grey);
+            transition: border-color .15s, background .15s;
+        }
+
+        .upload-zone:hover {
+            border-color: var(--blue);
+            background: #F6F8FC;
+        }
+
+        .upload-icon {
+            width: 42px;
+            height: 42px;
+            margin: 0 auto 9px;
+            border-radius: 12px;
+            background: var(--blue-light);
+            color: var(--blue);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 18px;
+        }
+
+        .upload-zone strong {
+            display: block;
+            color: var(--navy);
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .upload-zone span {
+            font-size: 10.5px;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .category-card {
+            border: 1.5px solid var(--line);
+            border-radius: 14px;
+            padding: 17px 12px;
+            background: white;
+            cursor: pointer;
+            text-align: center;
+            transition: .15s;
+        }
+
+        .category-card:hover {
+            border-color: var(--blue);
+            transform: translateY(-1px);
+        }
+
+        .category-card.selected {
+            border-color: var(--blue);
+            background: var(--blue-light);
+        }
+
+        .category-icon {
+            font-size: 22px;
+            margin-bottom: 7px;
+        }
+
+        .category-card strong {
+            display: block;
+            font-size: 11px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 22px;
+        }
+
+        .secondary-btn {
+            flex: 1;
+            background: white;
+            color: var(--blue);
+            border: 1.5px solid var(--blue);
+        }
+
+        .primary-btn {
+            flex: 1;
+        }
+
+        /* =========================================
+           ANALYSIS
+        ========================================= */
+
+        .analysis-page {
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .analysis-ring {
+            width: 86px;
+            height: 86px;
+            border-radius: 50%;
+            border: 6px solid #DCE5F3;
+            border-top-color: var(--blue);
+            animation: spin 1.2s linear infinite;
+            margin-bottom: 22px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .analysis-page p {
+            color: var(--grey);
+            font-size: 12px;
+        }
+
+        .progress-list {
+            width: 100%;
+            max-width: 430px;
+            margin-top: 25px;
+            text-align: left;
+        }
+
+        .analysis-step {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0;
+            font-size: 12px;
+            color: var(--grey);
+        }
+
+        .analysis-step .check {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 1.5px solid #CCD3DE;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 10px;
+        }
+
+        .analysis-step.done {
+            color: var(--ink);
+        }
+
+        .analysis-step.done .check {
+            background: var(--teal);
+            color: white;
+            border-color: var(--teal);
+        }
+
+        /* =========================================
+           RESULTS
+        ========================================= */
+
+        .results-header {
+            margin-bottom: 18px;
+        }
+
+        .results-header h1 {
+            font-size: 22px;
+        }
+
+        .results-header p {
+            font-size: 12px;
+            color: var(--grey);
+            margin-top: 5px;
+        }
+
+        .result-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 18px;
+        }
+
+        .filter-panel {
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 15px;
+            padding: 16px;
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+
+        .filter-panel h4 {
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+
+        .filter-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #EEF0F3;
+            font-size: 11px;
+            color: var(--grey);
+        }
+
+        .filter-item:last-child {
+            border-bottom: none;
+        }
+
+        .standard-card {
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 17px;
+            padding: 18px;
+            margin-bottom: 12px;
+            transition: transform .12s, box-shadow .15s;
+        }
+
+        .standard-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .standard-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .standard-number {
+            font-family: monospace;
+            font-size: 11px;
+            color: var(--grey);
+        }
+
+        .standard-card h3 {
+            font-size: 15px;
+            margin: 5px 0 8px;
+        }
+
+        .badge {
+            display: inline-block;
+            border-radius: 20px;
+            padding: 4px 9px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .badge-current {
+            color: var(--teal);
+            background: var(--teal-light);
+        }
+
+        .badge-superseded {
+            color: var(--amber);
+            background: var(--amber-light);
+        }
+
+        .relevance {
+            width: 65px;
+            height: 65px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            border: 5px solid #E5E9EF;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-family: 'Poppins', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--blue);
+        }
+
+        .why-box {
+            background: var(--off);
+            border-radius: 10px;
+            padding: 10px 12px;
+            color: var(--grey);
+            font-size: 11px;
+            line-height: 1.5;
+            margin-top: 12px;
+        }
+
+        .standard-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .standard-actions button {
+            flex: 1;
+            padding: 10px;
+            font-size: 11px;
+        }
+
+        .outline-btn {
+            background: white;
+            color: var(--blue);
+            border: 1px solid #C9D3E1;
+            box-shadow: none;
+        }
+
+        /* =========================================
+           DETAIL PAGE
+        ========================================= */
+
+        .detail-header {
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .detail-number {
+            font-family: monospace;
+            color: var(--grey);
+            font-size: 11px;
+        }
+
+        .detail-header h1 {
+            font-size: 21px;
+            margin-top: 5px;
+        }
+
+        .detail-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            margin-top: 12px;
+        }
+
+        .detail-section {
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 15px;
+            padding: 18px;
+            margin-top: 14px;
+        }
+
+        .detail-section h3 {
+            font-size: 13px;
+            margin-bottom: 9px;
+        }
+
+        .detail-section p {
+            font-size: 12px;
+            color: var(--grey);
+            line-height: 1.6;
+        }
+
+        .requirements-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .requirement-card {
+            border: 1px solid var(--line);
+            border-radius: 11px;
+            padding: 11px;
+        }
+
+        .requirement-card strong {
+            display: block;
+            font-size: 10px;
+            color: var(--blue);
+            margin-bottom: 4px;
+        }
+
+        .requirement-card span {
+            font-size: 11px;
+            color: var(--grey);
+            line-height: 1.4;
+        }
+
+        /* =========================================
+           TENDER
+        ========================================= */
+
+        .compliance-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .compliance-card {
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .compliance-number {
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .compliance-label {
+            font-size: 10px;
+            color: var(--grey);
+            margin-top: 3px;
+        }
+
+        /* =========================================
+           REPORT
+        ========================================= */
+
+        .report-preview {
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 25px;
+        }
+
+        .report-header {
+            border-bottom: 1px solid var(--line);
+            padding-bottom: 16px;
+        }
+
+        .report-header h2 {
+            font-size: 20px;
+        }
+
+        .report-header p {
+            font-size: 11px;
+            color: var(--grey);
+            margin-top: 4px;
+        }
+
+        .report-metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 18px 0;
+        }
+
+        .report-metric {
+            border: 1px solid var(--line);
+            border-radius: 11px;
+            padding: 13px;
+            text-align: center;
+        }
+
+        .report-metric strong {
+            display: block;
+            font-size: 18px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .report-metric span {
+            font-size: 9px;
+            color: var(--grey);
+        }
+
+        /* =========================================
+           MOBILE BOTTOM NAV
+        ========================================= */
+
+        .mobile-nav {
+            display: none;
+        }
+
+        /* =========================================
+           MOBILE
+        ========================================= */
+
+        @media (max-width: 900px) {
+
+            .sidebar {
+                display: none;
+            }
+
+            .main-area {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .desktop-topbar {
+                height: 62px;
+                padding: 0 17px;
+            }
+
+            .content {
+                padding: 18px 16px 85px;
+            }
+
+            .stat-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .dashboard-grid,
+            .result-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-panel {
+                position: static;
+            }
+
+            .mobile-nav {
+                display: flex;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 64px;
+
+                background: white;
+                border-top: 1px solid var(--line);
+
+                z-index: 20;
+                padding-bottom: env(safe-area-inset-bottom);
+            }
+
+            .mobile-nav button {
+                flex: 1;
+                background: white;
+                color: var(--muted);
+                box-shadow: none;
+                border-radius: 0;
+                padding: 7px 3px;
+                font-size: 9px;
+            }
+
+            .mobile-nav button.active {
+                color: var(--blue);
+            }
+
+            .mobile-nav .m-icon {
+                display: block;
+                font-size: 18px;
+                margin-bottom: 2px;
+            }
+
+            .category-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .welcome-content h1 {
+                font-size: 31px;
+            }
+        }
+
+        @media (max-width: 560px) {
+
+            .desktop-topbar {
+                display: none;
+            }
+
+            .content {
+                padding-top: 20px;
+            }
+
+            .hero {
+                border-radius: 17px;
+                padding: 21px;
+            }
+
+            .hero h1 {
+                font-size: 22px;
+            }
+
+            .stat-card {
+                padding: 12px;
+            }
+
+            .stat-icon {
+                width: 34px;
+                height: 34px;
+            }
+
+            .stat-value {
+                font-size: 16px;
+            }
+
+            .requirements-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .compliance-grid,
+            .report-metrics {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .login-card {
+                padding: 21px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="app"></div>
+
+    <script>
+
+        /* =====================================================
+           APP STATE
+        ===================================================== */
+
+        let S = {
+            screen: 'welcome',
+            nav: 'home',
+            step: 0,
+            cat: '',
+            cur: null,
+            selected: new Set()
+        };
+
+
+        /* =====================================================
+           MOCK STANDARDS DATA
+        ===================================================== */
+
+        const STD = [
+
+            {
+                id: 'IS XXXXX : 20XX',
+                title: 'PVC Insulated Electrical Cables',
+                cat: 'Electrical',
+                rel: 94,
+                status: 'current',
+
+                why:
+                    'Matches the product type, application and electrical safety requirements described in the procurement requirement.',
+
+                scope:
+                    'Covers requirements related to PVC insulated electrical cables intended for specified industrial and domestic applications.',
+
+                req: {
+                    Material: 'PVC insulated conductor',
+                    Performance: 'Electrical and mechanical performance',
+                    Safety: 'Electrical safety requirements',
+                    Testing: 'Insulation and voltage testing'
+                }
+            },
+
+            {
+                id: 'IS XXXXX : 20XX',
+                title: 'Low Voltage PVC Insulated Cables',
+                cat: 'Electrical',
+                rel: 88,
+                status: 'current',
+
+                why:
+                    'Relevant to the specified low-voltage electrical cable application and associated performance requirements.',
+
+                scope:
+                    'Addresses construction, dimensions, performance and testing considerations for low-voltage insulated cables.',
+
+                req: {
+                    Material: 'Copper or aluminium conductor',
+                    Performance: 'Current carrying performance',
+                    Safety: 'Short-circuit considerations',
+                    Testing: 'Routine and type testing'
+                }
+            },
+
+            {
+                id: 'IS XXXXX : 20XX',
+                title: 'Industrial Protective Safety Equipment',
+                cat: 'Safety',
+                rel: 91,
+                status: 'superseded',
+
+                why:
+                    'Related to the safety equipment requirement, but the system has identified that the reference should be reviewed for its current version.',
+
+                scope:
+                    'Provides requirements associated with industrial protective equipment and related safety performance.',
+
+                req: {
+                    Material: 'Specified protective material',
+                    Performance: 'Impact and protective performance',
+                    Safety: 'Protection requirements',
+                    Testing: 'Performance verification'
+                }
+            },
+
+            {
+                id: 'IS XXXXX : 20XX',
+                title: 'Electrical Installation Requirements',
+                cat: 'Installation',
+                rel: 82,
+                status: 'current',
+
+                why:
+                    'Detected as a related installation standard for the electrical product and intended application.',
+
+                scope:
+                    'Addresses installation considerations associated with electrical systems and equipment.',
+
+                req: {
+                    Installation: 'Installation practices',
+                    Safety: 'Electrical safety',
+                    Inspection: 'Inspection requirements',
+                    Testing: 'Installation testing'
+                }
+            }
+
+        ];
+
+
+        /* =====================================================
+           UTILITY
+        ===================================================== */
+
+        function go(screenName) {
+
+            S.screen = screenName;
+
+            render();
+        }
+
+
+        function toggleSelected(id) {
+
+            if (S.selected.has(id)) {
+                S.selected.delete(id);
+            } else {
+                S.selected.add(id);
+            }
+
+            render();
+        }
+
+
+        /* =====================================================
+           WELCOME SCREEN
+        ===================================================== */
+
+        function welcomeScreen() {
+
+            return `
+
+            <div class="welcome-screen">
+
+                <div class="welcome-glow glow-one"></div>
+                <div class="welcome-glow glow-two"></div>
+
+                <div class="welcome-content">
+
+                    <div class="welcome-logo">
+                        SA
+                    </div>
+
+                    <h1>
+                        StandardsAI
+                    </h1>
+
+                    <p>
+                        Indian Standards<br>
+                        Recommendation Platform
+                    </p>
+
+                    <div class="welcome-loader">
+                        <div class="welcome-loader-bar"></div>
+                    </div>
+
+                </div>
+
+                <div class="welcome-footer">
+                    Intelligent procurement • Standards • Compliance
+                </div>
+
+            </div>
+
+            `;
+        }
+
+
+        /* =====================================================
+           LOGIN SCREEN
+        ===================================================== */
+
+        function loginScreen() {
+
+            return `
+
+            <div class="login-page fadein">
+
+                <div class="login-brand">
+
+                    <div class="login-logo">
+                        SA
+                    </div>
+
+                    <h1>
+                        StandardsAI
+                    </h1>
+
+                    <p>
+                        Indian Standards for e-procurement
+                    </p>
+
+                </div>
+
+
+                <div class="login-card">
+
+                    <div class="login-heading">
+
+                        <h2>
+                            Welcome back
+                        </h2>
+
+                        <p>
+                            Sign in to continue to your procurement workspace.
+                        </p>
+
+                    </div>
+
+
+                    <label>
+                        Email address
+                    </label>
+
+                    <input
+                        type="email"
+                        placeholder="Enter your email"
+                    >
+
+
+                    <label style="margin-top:15px">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        placeholder="Enter your password"
+                    >
+
+
+                    <div class="login-options">
+
+                        <label class="remember">
+
+                            <input type="checkbox">
+
+                            <span>
+                                Remember me
+                            </span>
+
+                        </label>
+
+
+                        <button
+                            class="forgot-btn"
+                            onclick="alert('Password recovery will be available when authentication is connected.')"
+                        >
+                            Forgot password?
+                        </button>
+
+                    </div>
+
+
+                    <button
+                        class="login-btn"
+                        onclick="S.nav='home';go('dashboard')"
+                    >
+
+                        Sign In
+
+                        <span>
+                            →
+                        </span>
+
+                    </button>
+
+
+                    <div class="login-divider">
+
+                        <span>
+                            OR
+                        </span>
+
+                    </div>
+
+
+                    <button
+                        class="guest-btn"
+                        onclick="S.nav='home';go('dashboard')"
+                    >
+
+                        Continue as Guest
+
+                    </button>
+
+                </div>
+
+
+                <p class="login-note">
+
+                    Secure procurement intelligence for Indian Standards
+
+                </p>
+
+            </div>
+
+            `;
+        }
+
+
+        /* =====================================================
+           DESKTOP SIDEBAR
+        ===================================================== */
+
+        function sidebar() {
+
+            return `
+
+            <aside class="sidebar">
+
+                <div class="brand">
+
+                    <div class="brand-logo">
+                        SA
+                    </div>
+
+                    <div class="brand-text">
+
+                        <strong>
+                            StandardsAI
+                        </strong>
+
+                        <span>
+                            Procurement Intelligence
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="side-label">
+                    Workspace
+                </div>
+
+
+                <div class="side-nav">
+
+                    <button
+                        class="side-btn ${S.nav === 'home' ? 'active' : ''}"
+                        onclick="S.nav='home';go('dashboard')"
+                    >
+
+                        <span class="side-icon">
+                            🏠
+                        </span>
+
+                        Dashboard
+
+                    </button>
+
+
+                    <button
+                        class="side-btn ${S.nav === 'new' ? 'active' : ''}"
+                        onclick="S.nav='new';S.step=0;go('new')"
+                    >
+
+                        <span class="side-icon">
+                            ＋
+                        </span>
+
+                        New Recommendation
+
+                    </button>
+
+
+                    <button
+                        class="side-btn ${S.nav === 'standards' ? 'active' : ''}"
+                        onclick="S.nav='standards';go('results')"
+                    >
+
+                        <span class="side-icon">
+                            📖
+                        </span>
+
+                        Standards
+
+                    </button>
+
+
+                    <button
+                        class="side-btn ${S.nav === 'tender' ? 'active' : ''}"
+                        onclick="S.nav='tender';go('tender')"
+                    >
+
+                        <span class="side-icon">
+                            ✓
+                        </span>
+
+                        Tender Checker
+
+                    </button>
+
+
+                    <button
+                        class="side-btn ${S.nav === 'reports' ? 'active' : ''}"
+                        onclick="S.nav='reports';go('reports')"
+                    >
+
+                        <span class="side-icon">
+                            📄
+                        </span>
+
+                        Reports
+
+                    </button>
+
+                </div>
+
+
+                <div class="side-bottom">
+
+                    <div class="side-label">
+                        Account
+                    </div>
+
+                    <button
+                        class="side-btn"
+                        onclick="alert('Settings will be available when account services are connected.')"
+                    >
+
+                        <span class="side-icon">
+                            ⚙
+                        </span>
+
+                        Settings
+
+                    </button>
+
+
+                    <button
+                        class="side-btn"
+                        onclick="go('login')"
+                    >
+
+                        <span class="side-icon">
+                            ↪
+                        </span>
+
+                        Sign out
+
+                    </button>
+
+                </div>
+
+            </aside>
+
+            `;
+        }
+
+
+        /* =====================================================
+           DESKTOP TOP BAR
+        ===================================================== */
+
+        function desktopTopbar(title, subtitle) {
+
+            return `
+
+            <div class="desktop-topbar">
+
+                <div class="page-title">
+
+                    <h2>
+                        ${title}
+                    </h2>
+
+                    <p>
+                        ${subtitle || ''}
+                    </p>
+
+                </div>
+
+
+                <div class="user-pill">
+
+                    <span>
+                        Guest account
+                    </span>
+
+                    <div class="avatar">
+                        G
+                    </div>
+
+                </div>
+
+            </div>
+
+            `;
+        }
+
+
+        /* =====================================================
+           MOBILE NAV
+        ===================================================== */
+
+        function mobileNav() {
+
+            return `
+
+            <div class="mobile-nav">
+
+                <button
+                    class="${S.nav === 'home' ? 'active' : ''}"
+                    onclick="S.nav='home';go('dashboard')"
+                >
+
+                    <span class="m-icon">
+                        🏠
+                    </span>
+
+                    Home
+
+                </button>
+
+
+                <button
+                    class="${S.nav === 'new' ? 'active' : ''}"
+                    onclick="S.nav='new';S.step=0;go('new')"
+                >
+
+                    <span class="m-icon">
+                        ＋
+                    </span>
+
+                    New
+
+                </button>
+
+
+                <button
+                    class="${S.nav === 'standards' ? 'active' : ''}"
+                    onclick="S.nav='standards';go('results')"
+                >
+
+                    <span class="m-icon">
+                        📖
+                    </span>
+
+                    Standards
+
+                </button>
+
+
+                <button
+                    class="${S.nav === 'reports' ? 'active' : ''}"
+                    onclick="S.nav='reports';go('reports')"
+                >
+
+                    <span class="m-icon">
+                        📄
+                    </span>
+
+                    Reports
+
+                </button>
+
+            </div>
+
+            `;
+        }
+
+
+        /* =====================================================
+           APP LAYOUT
+        ===================================================== */
+
+        function appLayout(title, subtitle, content) {
+
+            return `
+
+            <div class="app-shell">
+
+                ${sidebar()}
+
+                <main class="main-area">
+
+                    ${desktopTopbar(title, subtitle)}
+
+                    <div class="content fadein">
+
+                        ${content}
+
+                    </div>
+
+                </main>
+
+            </div>
+
+            ${mobileNav()}
+
+            `;
+        }
+
+
+        /* =====================================================
+           DASHBOARD
+        ===================================================== */
+
+        function dashboardScreen() {
+
+            const content = `
+
+                <div class="hero">
+
+                    <div class="hero-content">
+
+                        <small>
+                            Good morning
+                        </small>
+
+                        <h1>
+                            Procurement Officer
+                        </h1>
+
+                        <p>
+                            Find the right Indian Standards for your procurement requirements,
+                            tender specifications and compliance checks.
+                        </p>
+
+                        <button
+                            class="hero-btn"
+                            onclick="S.step=0;S.nav='new';go('new')"
+                        >
+                            ＋ New recommendation
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat-grid">
+
+                    <div class="stat-card">
+
+                        <div
+                            class="stat-icon"
+                            style="background:#EAF0FB"
+                        >
+                            📊
+                        </div>
+
+                        <div>
+
+                            <div class="stat-value">
+                                128
+                            </div>
+
+                            <div class="stat-label">
+                                Analyses
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div
+                            class="stat-icon"
+                            style="background:#E5F4F1"
+                        >
+                            📘
+                        </div>
+
+                        <div>
+
+                            <div class="stat-value">
+                                462
+                            </div>
+
+                            <div class="stat-label">
+                                Standards found
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div
+                            class="stat-icon"
+                            style="background:#FBF0DF"
+                        >
+                            📄
+                        </div>
+
+                        <div>
+
+                            <div class="stat-value">
+                                47
+                            </div>
+
+                            <div class="stat-label">
+                                Reports
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div
+                            class="stat-icon"
+                            style="background:#FDECEC"
+                        >
+                            ⏳
+                        </div>
+
+                        <div>
+
+                            <div class="stat-value">
+                                6
+                            </div>
+
+                            <div class="stat-label">
+                                Pending review
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="section-head">
+
+                    <h3>
+                        Activity overview
+                    </h3>
+
+                    <span>
+                        Last 7 days
+                    </span>
+
+                </div>
+
+
+                <div class="dashboard-grid">
+
+                    <div class="panel">
+
+                        <h3 style="font-size:13px">
+                            Recommendation activity
+                        </h3>
+
+                        <div class="activity-chart">
+
+                            <div
+                                class="chart-bar"
+                                style="height:35%"
+                            ></div>
+
+                            <div
+                                class="chart-bar"
+                                style="height:55%"
+                            ></div>
+
+                            <div
+                                class="chart-bar"
+                                style="height:45%"
+                            ></div>
+
+                            <div
+                                class="chart-bar"
+                                style="height:75%"
+                            ></div>
+
+                            <div
+                                class="chart-bar"
+                                style="height:60%"
+                            ></div>
+
+                            <div
+                                class="chart-bar"
+                                style="height:85%"
+                            ></div>
+
+                            <div
+                                class="chart-bar"
+                                style="height:70%"
+                            ></div>
+
+                        </div>
+
+
+                        <div class="chart-labels">
+
+                            <span>Mon</span>
+                            <span>Tue</span>
+                            <span>Wed</span>
+                            <span>Thu</span>
+                            <span>Fri</span>
+                            <span>Sat</span>
+                            <span>Sun</span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="panel">
+
+                        <h3 style="font-size:13px">
+                            Quick actions
+                        </h3>
+
+
+                        <button
+                            style="width:100%;margin-top:13px"
+                            onclick="S.step=0;S.nav='new';go('new')"
+                        >
+                            ＋ Create recommendation
+                        </button>
+
+
+                        <button
+                            class="outline-btn"
+                            style="width:100%;margin-top:9px"
+                            onclick="S.nav='tender';go('tender')"
+                        >
+                            ✓ Check tender compliance
+                        </button>
+
+
+                        <button
+                            class="outline-btn"
+                            style="width:100%;margin-top:9px"
+                            onclick="S.nav='standards';go('results')"
+                        >
+                            📖 Browse standards
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="section-head">
+
+                    <h3>
+                        Recent analyses
+                    </h3>
+
+                    <span>
+                        View all
+                    </span>
+
+                </div>
+
+
+                <div class="rec-list">
+
+                    <div class="rec-row">
+
+                        <div
+                            class="rec-bar"
+                            style="background:var(--teal)"
+                        ></div>
+
+                        <div class="rec-main">
+
+                            <div class="rec-title">
+                                Industrial Safety Equipment
+                            </div>
+
+                            <div class="rec-sub">
+                                Completed · Today
+                            </div>
+
+                        </div>
+
+                        <span class="status-dot status-current">
+                            Complete
+                        </span>
+
+                    </div>
+
+
+                    <div class="rec-row">
+
+                        <div
+                            class="rec-bar"
+                            style="background:var(--teal)"
+                        ></div>
+
+                        <div class="rec-main">
+
+                            <div class="rec-title">
+                                PVC Electrical Cable
+                            </div>
+
+                            <div class="rec-sub">
+                                Completed · Yesterday
+                            </div>
+
+                        </div>
+
+                        <span class="status-dot status-current">
+                            Complete
+                        </span>
+
+                    </div>
+
+
+                    <div class="rec-row">
+
+                        <div
+                            class="rec-bar"
+                            style="background:var(--amber)"
+                        ></div>
+
+                        <div class="rec-main">
+
+                            <div class="rec-title">
+                                Steel Water Tank
+                            </div>
+
+                            <div class="rec-sub">
+                                Under review · 24 Sep
+                            </div>
+
+                        </div>
+
+                        <span class="status-dot status-warning">
+                            Review
+                        </span>
+
+                    </div>
+
+                </div>
+
+            `;
+
+            return appLayout(
+                'Dashboard',
+                'Standards recommendation and procurement intelligence',
+                content
+            );
+        }
+
+
+        /* =====================================================
+           NEW RECOMMENDATION
+        ===================================================== */
+
+        function newScreen() {
+
+            let content = `
+
+                <div class="form-container">
+
+                    <div style="margin-bottom:5px">
+
+                        <h1 style="font-size:22px">
+                            New recommendation
+                        </h1>
+
+                        <p
+                            style="
+                            color:var(--grey);
+                            font-size:12px;
+                            margin-top:5px;
+                            "
+                        >
+                            Describe your procurement requirement and StandardsAI
+                            will identify relevant standards.
+                        </p>
+
+                    </div>
+
+
+                    <div class="step-dots">
+
+                        <span class="dot ${S.step >= 0 ? 'on' : ''}"></span>
+                        <span class="dot ${S.step >= 1 ? 'on' : ''}"></span>
+                        <span class="dot ${S.step >= 2 ? 'on' : ''}"></span>
+
+                    </div>
+
+            `;
+
+
+            if (S.step === 0) {
+
+                content += `
+
+                    <label>
+                        Procurement requirement
+                    </label>
+
+                    <textarea
+                        rows="7"
+                        placeholder="Describe the product, technical specification, intended application or tender requirement..."
+                    >PVC insulated electrical cables for industrial applications, requiring electrical safety and insulation testing.</textarea>
+
+
+                    <div class="section-head">
+
+                        <h3>
+                            Or upload a tender
+                        </h3>
+
+                    </div>
+
+
+                    <div class="upload-zone">
+
+                        <div class="upload-icon">
+                            ↑
+                        </div>
+
+                        <strong>
+                            Upload tender document
+                        </strong>
+
+                        <span>
+                            PDF, DOCX or TXT
+                        </span>
+
+                    </div>
+
+
+                    <button
+                        style="width:100%;margin-top:18px"
+                        onclick="S.step=1;render()"
+                    >
+                        Continue →
+                    </button>
+
+                `;
+            }
+
+
+            if (S.step === 1) {
+
+                content += `
+
+                    <label>
+                        Industry / category
+                    </label>
+
+                    <div class="category-grid">
+
+                        <div
+                            class="category-card ${S.cat === 'Electrical' ? 'selected' : ''}"
+                            onclick="S.cat='Electrical';render()"
+                        >
+
+                            <div class="category-icon">
+                                ⚡
+                            </div>
+
+                            <strong>
+                                Electrical
+                            </strong>
+
+                        </div>
+
+
+                        <div
+                            class="category-card ${S.cat === 'Safety' ? 'selected' : ''}"
+                            onclick="S.cat='Safety';render()"
+                        >
+
+                            <div class="category-icon">
+                                🦺
+                            </div>
+
+                            <strong>
+                                Safety
+                            </strong>
+
+                        </div>
+
+
+                        <div
+                            class="category-card ${S.cat === 'Structural' ? 'selected' : ''}"
+                            onclick="S.cat='Structural';render()"
+                        >
+
+                            <div class="category-icon">
+                                🏗️
+                            </div>
+
+                            <strong>
+                                Structural
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-actions">
+
+                        <button
+                            class="secondary-btn"
+                            onclick="S.step=0;render()"
+                        >
+                            Back
+                        </button>
+
+                        <button
+                            class="primary-btn"
+                            onclick="S.step=2;render()"
+                        >
+                            Continue →
+                        </button>
+
+                    </div>
+
+                `;
+            }
+
+
+            if (S.step === 2) {
+
+                content += `
+
+                    <label>
+                        Intended application
+                    </label>
+
+                    <input
+                        placeholder="Example: Industrial wiring"
+                    >
+
+
+                    <label style="margin-top:16px">
+                        Additional technical context
+                    </label>
+
+                    <textarea
+                        rows="5"
+                        placeholder="Add voltage, dimensions, material, operating conditions or other relevant information..."
+                    ></textarea>
+
+
+                    <div class="form-actions">
+
+                        <button
+                            class="secondary-btn"
+                            onclick="S.step=1;render()"
+                        >
+                            Back
+                        </button>
+
+                        <button
+                            class="primary-btn"
+                            onclick="go('analysis')"
+                        >
+                            Analyze requirement →
+                        </button>
+
+                    </div>
+
+                `;
+            }
+
+
+            content += `
+
+                </div>
+
+            `;
+
+
+            return appLayout(
+                'New Recommendation',
+                'Create an AI-assisted Indian Standards recommendation',
+                content
+            );
+        }
+
+
+        /* =====================================================
+           ANALYSIS SCREEN
+        ===================================================== */
+
+        function analysisScreen() {
+
+            setTimeout(function () {
+
+                if (S.screen === 'analysis') {
+                    go('results');
+                }
+
+            }, 3500);
+
+
+            const content = `
+
+                <div class="analysis-page">
+
+                    <div class="analysis-ring"></div>
+
+                    <h1 style="font-size:22px">
+                        Analyzing requirement
+                    </h1>
+
+                    <p>
+                        Identifying relevant Indian Standards and related references.
+                    </p>
+
+
+                    <div class="progress-list">
+
+                        <div class="analysis-step done">
+
+                            <span class="check">
+                                ✓
+                            </span>
+
+                            Understanding procurement description
+
+                        </div>
+
+
+                        <div class="analysis-step done">
+
+                            <span class="check">
+                                ✓
+                            </span>
+
+                            Identifying product category
+
+                        </div>
+
+
+                        <div class="analysis-step">
+
+                            <span class="check">
+                                •
+                            </span>
+
+                            Finding relevant standards
+
+                        </div>
+
+
+                        <div class="analysis-step">
+
+                            <span class="check">
+                                •
+                            </span>
+
+                            Checking revisions and amendments
+
+                        </div>
+
+
+                        <div class="analysis-step">
+
+                            <span class="check">
+                                •
+                            </span>
+
+                            Detecting related standards
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            `;
+
+
+            return appLayout(
+                'AI Analysis',
+                'Semantic analysis of your procurement requirement',
+                content
+            );
+        }
+
+
+        /* =====================================================
+           RESULTS
+        ===================================================== */
+
+        function resultsScreen() {
+
+            let cards = STD.map(function (s) {
+
+                const selected = S.selected.has(s.id);
+
+                return `
+
+                    <div class="standard-card">
+
+                        <div class="standard-top">
+
+                            <div>
+
+                                <div class="standard-number">
+                                    ${s.id}
+                                </div>
+
+                                <h3>
+                                    ${s.title}
+                                </h3>
+
+                                <span
+                                    class="badge ${
+                                        s.status === 'current'
+                                            ? 'badge-current'
+                                            : 'badge-superseded'
+                                    }"
+                                >
+                                    ${
+                                        s.status === 'current'
+                                            ? 'Current'
+                                            : 'Superseded'
+                                    }
+                                </span>
+
+                            </div>
+
+
+                            <div class="relevance">
+
+                                ${s.rel}%
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="why-box">
+
+                            <strong style="color:var(--ink)">
+                                Why recommended?
+                            </strong>
+
+                            <br>
+
+                            ${s.why}
+
+                        </div>
+
+
+                        <div class="standard-actions">
+
+                            <button
+                                class="outline-btn"
+                                onclick="S.cur='${s.id}';go('detail')"
+                            >
+                                View details
+                            </button>
+
+
+                            <button
+                                style="background:${
+                                    selected
+                                        ? 'var(--teal)'
+                                        : 'var(--blue)'
+                                }"
+                                onclick="toggleSelected('${s.id}')"
+                            >
+
+                                ${
+                                    selected
+                                        ? '✓ Added'
+                                        : 'Add to tender'
+                                }
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            }).join('');
+
+
+            const content = `
+
+                <div class="results-header">
+
+                    <h1>
+                        Recommended Indian Standards
+                    </h1>
+
+                    <p>
+                        Standards identified based on semantic analysis
+                        of your procurement requirement.
+                    </p>
+
+                </div>
+
+
+                <div class="result-layout">
+
+                    <div>
+
+                        ${cards}
+
+                    </div>
+
+
+                    <aside class="filter-panel">
+
+                        <h4>
+                            Filter by
+                        </h4>
+
+
+                        <div class="filter-item">
+                            Relevance
+                        </div>
+
+                        <div class="filter-item">
+                            Industry
+                        </div>
+
+                        <div class="filter-item">
+                            Standard type
+                        </div>
+
+                        <div class="filter-item">
+                            Current / Superseded
+                        </div>
+
+                        <div class="filter-item">
+                            Certification
+                        </div>
+
+                        <div class="filter-item">
+                            Test method
+                        </div>
+
+                        <div class="filter-item">
+                            Safety
+                        </div>
+
+                        <div class="filter-item">
+                            Installation
+                        </div>
+
+                    </aside>
+
+                </div>
+
+            `;
+
+
+            return appLayout(
+                'Recommendation Results',
+                `${STD.length} standards identified`,
+                content
+            );
+        }
+
+
+        /* =====================================================
+           STANDARD DETAILS
+        ===================================================== */
+
+        function detailScreen() {
+
+            const s = STD.find(function (x) {
+                return x.id === S.cur;
+            });
+
+
+            if (!s) {
+                return dashboardScreen();
+            }
+
+
+            let requirements = '';
+
+            for (const key in s.req) {
+
+                requirements += `
+
+                    <div class="requirement-card">
+
+                        <strong>
+                            ${key}
+                        </strong>
+
+                        <span>
+                            ${s.req[key]}
+                        </span>
+
+                    </div>
+
+                `;
+
+            }
+
+
+            const content = `
+
+                <div class="detail-header">
+
+                    <div class="detail-number">
+                        ${s.id}
+                    </div>
+
+                    <h1>
+                        ${s.title}
+                    </h1>
+
+                    <div class="detail-meta">
+
+                        <span
+                            class="badge ${
+                                s.status === 'current'
+                                    ? 'badge-current'
+                                    : 'badge-superseded'
+                            }"
+                        >
+                            ${
+                                s.status === 'current'
+                                    ? 'Current'
+                                    : 'Superseded'
+                            }
+                        </span>
+
+                        <span class="badge badge-current">
+                            ${s.cat}
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="detail-section">
+
+                    <h3>
+                        Scope
+                    </h3>
+
+                    <p>
+                        ${s.scope}
+                    </p>
+
+                </div>
+
+
+                <div class="detail-section">
+
+                    <h3>
+                        Why this standard is recommended
+                    </h3>
+
+                    <p>
+                        ${s.why}
+                    </p>
+
+                </div>
+
+
+                <div class="detail-section">
+
+                    <h3>
+                        Key requirements
+                    </h3>
+
+                    <div class="requirements-grid">
+
+                        ${requirements}
+
+                    </div>
+
+                </div>
+
+
+                <div class="detail-section">
+
+                    <h3>
+                        Related & Allied Standards
+                    </h3>
+
+                    <p>
+                        Related normative references, testing methods,
+                        safety requirements, installation standards and
+                        terminology references can be reviewed here.
+                    </p>
+
+                    <button
+                        class="outline-btn"
+                        style="margin-top:8px"
+                        onclick="alert('Allied standards relationship view will open here.')"
+                    >
+                        View relationships
+                    </button>
+
+                </div>
+
+
+                <div class="detail-section">
+
+                    <h3>
+                        Version & Amendment Tracker
+                    </h3>
+
+                    <p>
+                        Review revision history and verify that the
+                        selected reference is the appropriate current version.
+                    </p>
+
+                    <button
+                        class="outline-btn"
+                        style="margin-top:8px"
+                        onclick="alert('Version timeline will open here.')"
+                    >
+                        View version timeline
+                    </button>
+
+                </div>
+
+
+                <div class="detail-section">
+
+                    <h3>
+                        Certification & Regulatory Review
+                    </h3>
+
+                    <p>
+                        Certification and regulatory applicability should
+                        be verified against authoritative sources before
+                        procurement decisions are finalized.
+                    </p>
+
+                    <span class="badge badge-current">
+                        Verification required
+                    </span>
+
+                </div>
+
+            `;
+
+
+            return appLayout(
+                'Standard Details',
+                s.id,
+                content
+            );
+        }
+
+
+        /* =====================================================
+           TENDER COMPLIANCE
+        ===================================================== */
+
+        function tenderScreen() {
+
+            const content = `
+
+                <div style="max-width:760px">
+
+                    <h1 style="font-size:22px">
+                        Tender Compliance Checker
+                    </h1>
+
+                    <p
+                        style="
+                        color:var(--grey);
+                        font-size:12px;
+                        line-height:1.5;
+                        margin-top:5px;
+                        "
+                    >
+                        Upload an existing tender to identify missing
+                        references, outdated standards and potential
+                        compliance gaps.
+                    </p>
+
+
+                    <div
+                        class="panel"
+                        style="margin-top:18px"
+                    >
+
+                        <div class="upload-zone">
+
+                            <div class="upload-icon">
+                                ↑
+                            </div>
+
+                            <strong>
+                                Upload tender document
+                            </strong>
+
+                            <span>
+                                PDF, DOCX or TXT
+                            </span>
+
+                        </div>
+
+
+                        <button
+                            style="width:100%;margin-top:15px"
+                            onclick="document.getElementById('complianceResult').style.display='block'"
+                        >
+                            Check compliance
+                        </button>
+
+                    </div>
+
+
+                    <div
+                        id="complianceResult"
+                        style="display:none"
+                    >
+
+                        <div class="section-head">
+
+                            <h3>
+                                Compliance overview
+                            </h3>
+
+                        </div>
+
+
+                        <div class="compliance-grid">
+
+                            <div class="compliance-card">
+
+                                <div
+                                    class="compliance-number"
+                                    style="color:var(--amber)"
+                                >
+                                    3
+                                </div>
+
+                                <div class="compliance-label">
+                                    Missing references
+                                </div>
+
+                            </div>
+
+
+                            <div class="compliance-card">
+
+                                <div
+                                    class="compliance-number"
+                                    style="color:var(--amber)"
+                                >
+                                    1
+                                </div>
+
+                                <div class="compliance-label">
+                                    Superseded reference
+                                </div>
+
+                            </div>
+
+
+                            <div class="compliance-card">
+
+                                <div
+                                    class="compliance-number"
+                                    style="color:var(--teal)"
+                                >
+                                    ✓
+                                </div>
+
+                                <div class="compliance-label">
+                                    Certification reference
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <button
+                            style="width:100%;margin-top:15px"
+                            onclick="S.nav='standards';go('results')"
+                        >
+                            Review recommended standards
+                        </button>
+
+                    </div>
+
+                </div>
+
+            `;
+
+
+            return appLayout(
+                'Tender Compliance',
+                'Review tender requirements against identified standards',
+                content
+            );
+        }
+
+
+        /* =====================================================
+           REPORTS
+        ===================================================== */
+
+        function reportsScreen() {
+
+            const rows = STD.filter(function (s) {
+                return S.selected.has(s.id);
+            });
+
+
+            let list = '';
+
+
+            if (rows.length === 0) {
+
+                list = `
+
+                    <div
+                        class="panel"
+                        style="
+                        text-align:center;
+                        padding:35px 20px;
+                        "
+                    >
+
+                        <div style="font-size:28px">
+                            📄
+                        </div>
+
+                        <h3 style="font-size:14px;margin-top:10px">
+                            No standards selected
+                        </h3>
+
+                        <p
+                            style="
+                            font-size:11px;
+                            color:var(--grey);
+                            line-height:1.5;
+                            "
+                        >
+                            Go to Recommendation Results and add
+                            standards to your tender.
+                        </p>
+
+                        <button
+                            style="margin-top:8px"
+                            onclick="S.nav='standards';go('results')"
+                        >
+                            Browse recommendations
+                        </button>
+
+                    </div>
+
+                `;
+
+            } else {
+
+                rows.forEach(function (r) {
+
+                    list += `
+
+                        <div class="rec-row">
+
+                            <div
+                                class="rec-bar"
+                                style="
+                                background:${
+                                    r.status === 'current'
+                                        ? 'var(--teal)'
+                                        : 'var(--amber)'
+                                }
+                                "
+                            ></div>
+
+                            <div class="rec-main">
+
+                                <div class="rec-title">
+                                    ${r.id}
+                                </div>
+
+                                <div class="rec-sub">
+                                    ${r.title}
+                                </div>
+
+                            </div>
+
+                            <span
+                                class="status-dot ${
+                                    r.status === 'current'
+                                        ? 'status-current'
+                                        : 'status-warning'
+                                }"
+                            >
+                                ${
+                                    r.status === 'current'
+                                        ? 'Current'
+                                        : 'Review'
+                                }
+                            </span>
+
+                        </div>
+
+                    `;
+
+                });
+
+            }
+
+
+            const content = `
+
+                <div style="max-width:800px">
+
+                    <h1 style="font-size:22px">
+                        Procurement Report
+                    </h1>
+
+                    <p
+                        style="
+                        color:var(--grey);
+                        font-size:12px;
+                        margin-top:5px;
+                        "
+                    >
+                        Review the standards selected for your procurement requirement.
+                    </p>
+
+
+                    <div class="report-preview">
+
+                        <div class="report-header">
+
+                            <h2>
+                                Standards Recommendation Report
+                            </h2>
+
+                            <p>
+                                StandardsAI · Procurement Intelligence
+                            </p>
+
+                        </div>
+
+
+                        <div class="report-metrics">
+
+                            <div class="report-metric">
+
+                                <strong>
+                                    ${rows.length}
+                                </strong>
+
+                                <span>
+                                    Selected standards
+                                </span>
+
+                            </div>
+
+
+                            <div class="report-metric">
+
+                                <strong>
+                                    ${
+                                        rows.filter(
+                                            r => r.status === 'current'
+                                        ).length
+                                    }
+                                </strong>
+
+                                <span>
+                                    Current
+                                </span>
+
+                            </div>
+
+
+                            <div class="report-metric">
+
+                                <strong>
+                                    ${
+                                        rows.filter(
+                                            r => r.status === 'superseded'
+                                        ).length
+                                    }
+                                </strong>
+
+                                <span>
+                                    Requires review
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <h3 style="font-size:13px;margin-bottom:10px">
+                            Included standards
+                        </h3>
+
+
+                        <div class="rec-list">
+
+                            ${list}
+
+                        </div>
+
+
+                        <button
+                            style="width:100%;margin-top:16px"
+                            onclick="alert('Report generation will be connected to the backend later.')"
+                        >
+                            Generate Procurement Report
+                        </button>
+
+                    </div>
+
+                </div>
+
+            `;
+
+
+            return appLayout(
+                'Reports',
+                'Generate and review procurement documentation',
+                content
+            );
+        }
+
+
+        /* =====================================================
+           RENDER
+        ===================================================== */
+
+        function render() {
+
+            const map = {
+
+                welcome: welcomeScreen,
+
+                login: loginScreen,
+
+                dashboard: dashboardScreen,
+
+                new: newScreen,
+
+                analysis: analysisScreen,
+
+                results: resultsScreen,
+
+                detail: detailScreen,
+
+                tender: tenderScreen,
+
+                reports: reportsScreen
+
+            };
+
+
+            document.getElementById('app').innerHTML =
+                (map[S.screen] || welcomeScreen)();
+        }
+
+
+        /* =====================================================
+           START APP
+        ===================================================== */
+
+        render();
+
+
+        /*
+            WELCOME SCREEN:
+            Automatically moves to login after 5 seconds.
+        */
+
+        setTimeout(function () {
+
+            if (S.screen === 'welcome') {
+
+                go('login');
+
+            }
+
+        }, 5000);
+
+    </script>
+
+</body>
+
+</html>
